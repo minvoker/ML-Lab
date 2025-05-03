@@ -48,7 +48,8 @@ if data_method == "Example dataset":
         df = pd.read_csv('./app/example_datasets/test.csv') 
 
 elif data_method == "URL":
-    url_input = st.text_input("Enter url to download dataset")
+    url_input = st.text_input("Enter url to download dataset e.g (https://data.wa.gov/api/views/f6w7-q2d2/rows.csv?accessType=DOWNLOAD)")
+    st.write("Must be a .csv file")
     if url_input:
         try:
             df = pd.read_csv(url_input)
@@ -57,6 +58,8 @@ elif data_method == "URL":
 
 elif data_method == "Kaggle":
     kaggle_name = st.text_input("Enter Kaggle dataset name")
+    if not kaggle_name:
+        st.write("e.g (harishkumardatalab/medical-insurance-price-prediction)")
     if kaggle_name:
         try:
             df = download_kaggle_dataset(kaggle_name)
