@@ -1,0 +1,27 @@
+wine,price,taste,region
+acampo,103,1.0,2.0
+napa valley,89,4.2,1.0
+bordeaux,156,4.8,3.0
+chianti,45,3.5,4.0
+rioja,67,3.9,5.0
+barolo,198,4.7,4.0
+malbec,78,3.8,6.0
+cabernet,112,4.3,1.0
+merlot,95,4.0,3.0
+pinot noir,88,4.1,2.0
+syrah,92,4.2,5.0
+zinfandel,82,3.9,1.0
+sangiovese,115,4.4,4.0
+tempranillo,72,3.7,5.0
+nebbiolo,167,4.6,4.0
+carmenere,63,3.6,6.0
+grenache,86,4.0,3.0
+barbera,59,3.5,4.0
+pinotage,93,4.1,7.0
+primitivo,76,3.8,4.0
+mourvedre,108,4.3,3.0
+tannat,125,4.4,6.0
+aglianico,145,4.5,4.0
+montepulciano,68,3.7,4.0
+amarone,189,4.7,4.0
+brunello,178,4.6,4.0
