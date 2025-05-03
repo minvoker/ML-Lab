@@ -4,7 +4,7 @@ An interactive Streamlit-based machine learning sandbox for experimenting with r
 
 https://ml-lab-v1.streamlit.app/
 
-![Demo GIF](./demo.gif)
+![Demo GIF](./Demo.gif)
 
 ---
 
