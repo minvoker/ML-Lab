@@ -2,6 +2,8 @@
 
 An interactive Streamlit-based machine learning sandbox for experimenting with regression, clustering, and anomaly detection — all in your browser.
 
+https://ml-lab-v1.streamlit.app/
+
 ![Demo GIF](./demo.gif)
 
 ---
