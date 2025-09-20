@@ -1,5 +1,6 @@
 import streamlit as st
 from sklearn.decomposition import PCA
+from sklearn.impute import SimpleImputer
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -192,3 +193,65 @@ def handle_results(task_type, model_type, result, sample, features):
         st.write("Anomalies detected:", result["anomaly_count"])
         st.write("Normal points:", result["normal_count"])
         draw_anomaly_plot(result=result, dataset=st.session_state["preprocessed_df"], features=features)
+
+# Preprocessing functions
+def drop_missing_values(df, columns=None):
+    if columns is None:
+        return df.dropna()
+    else:
+        return df.dropna(subset=columns)
+
+def impute_missing_values(df, columns=None, strategy='mean'):
+    df_copy = df.copy()
+    
+    if columns is None:
+        # Only impute numeric columns
+        numeric_columns = df_copy.select_dtypes(include=[np.number]).columns
+    else:
+        numeric_columns = [col for col in columns if col in df_copy.columns and pd.api.types.is_numeric_dtype(df_copy[col])]
+    
+    if len(numeric_columns) == 0:
+        return df_copy
+    
+    imputer = SimpleImputer(strategy=strategy)
+    df_copy[numeric_columns] = imputer.fit_transform(df_copy[numeric_columns])
+    
+    return df_copy
+
+def remove_outliers_iqr(df, columns=None, factor=1.5):
+    df_copy = df.copy()
+    
+    if columns is None:
+        # Only process numeric columns
+        numeric_columns = df_copy.select_dtypes(include=[np.number]).columns
+    else:
+        numeric_columns = [col for col in columns if col in df_copy.columns and pd.api.types.is_numeric_dtype(df_copy[col])]
+    
+    if len(numeric_columns) == 0:
+        return df_copy
+    
+    # Calculate IQR for each numeric column
+    for col in numeric_columns:
+        Q1 = df_copy[col].quantile(0.25)
+        Q3 = df_copy[col].quantile(0.75)
+        IQR = Q3 - Q1
+        
+        # Define outlier bounds
+        lower_bound = Q1 - factor * IQR
+        upper_bound = Q3 + factor * IQR
+        
+        # Remove outliers
+        df_copy = df_copy[(df_copy[col] >= lower_bound) & (df_copy[col] <= upper_bound)]
+    
+    return df_copy
+
+def get_missing_value_summary(df):
+    missing_data = df.isnull().sum()
+    missing_percent = (missing_data / len(df)) * 100
+    
+    summary_df = pd.DataFrame({
+        'Missing Count': missing_data,
+        'Missing Percentage': missing_percent
+    })
+    
+    return summary_df[summary_df['Missing Count'] > 0].sort_values('Missing Count', ascending=False)
