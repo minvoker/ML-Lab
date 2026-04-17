@@ -7,7 +7,7 @@ def run_decision_tree_regression(dataset, features, target, max_depth=None):
     X = dataset[features]
     y = dataset[target]
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=False)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     regressor = DecisionTreeRegressor(max_depth=max_depth)
     regressor.fit(X_train, y_train)
