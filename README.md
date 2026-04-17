@@ -1,60 +1,66 @@
-# 🔍 ML Lab
+# ML Lab
 
-An interactive Streamlit-based machine learning sandbox for experimenting with regression, clustering, and anomaly detection — all in your browser.
+Interactive machine learning sandbox for experimenting with regression, clustering, and anomaly detection. Load a dataset, preprocess it, train a model, and explore the results — no code required.
 
-https://ml-lab-v1.streamlit.app/
+Live: https://ml-lab.maxharrison.xyz
 
 ![Demo GIF](./Demo.gif)
-
 ---
 
-## Project Overview
+## Stack
 
-**ML Sandbox** is designed as a hands-on playground where users can:
-- Upload or load datasets from Kaggle or URLs
-- Preprocess data with one-hot encoding and scaling
-- Select ML tasks: **Regression**, **Clustering**, or **Anomaly Detection**
-- Train models interactively with visual feedback and performance metrics
-
-It aims to make ML experimentation more accessible without writing any code.
+- **Frontend** — React, Vite, Material UI, Recharts
+- **Backend** — FastAPI, scikit-learn, pandas
+- **Models** — Linear Regression, Decision Tree, Random Forest, DBSCAN, Isolation Forest
 
 ---
 
 ## Features
 
-- 🧪 Dataset editor & preview
-- 📈 Regression models: Linear, Decision Tree, Random Forest
-- 🧭 Clustering: DBSCAN with PCA visualization
-- 🧨 Anomaly Detection: Isolation Forest with 2D PCA plot
-- ⚙️ Preprocessing: one-hot encoding, feature scaling
-- 💻 Built with **Streamlit**, **scikit-learn**, **Plotly**, and **Pandas**
+**Data tab** — load datasets via example, URL, Kaggle slug, or CSV upload. Column browser shows type, null counts, and per-column stats. Correlation matrix on demand.
+
+**Prepare tab** — missing value handling (drop or impute), one-hot encoding for categoricals, feature scaling, IQR outlier removal. Detects issues automatically.
+
+**Train tab** — pick task (regression / clustering / anomaly detection), select features, tune hyperparameters, train and view results. Metrics, scatter, and line plots for regression; PCA 2D plots for clustering and anomaly detection.
 
 ---
 
-## Challenges Faced
+## Project structure
 
-- Handling user-selected categorical/numerical feature encoding dynamically
-- Ensuring model compatibility with one-hot encoded inputs
-- PCA visualizations for both clustering and anomaly tasks in a reusable way
-- Keeping state across user interactions without breaking visual plots
+```
+ML-Lab/
+  app/                  # original model code (scikit-learn)
+    models/
+    example_datasets/
+    utils.py
+  backend/
+    main.py             # FastAPI — wraps the models, serves the frontend in prod
+    requirements.txt
+  frontend/
+    src/
+      api.js
+      hooks/            # useDataset, useTrain
+      components/       # DataTab, PrepareTab, TrainTab, charts, ErrorBoundary
+```
 
 ---
 
-
-## Local Setup
-
-### 1. Clone the repo
+## Running locally
 
 ```bash
-git clone https://github.com/minvoker/ml-lab.git
+git clone https://github.com/minvoker/ML-Lab.git
 cd ML-Lab
 ```
 
-### 2. Install dependencies
+Install dependencies first:
 ```bash
-pip install -r requirements.txt
+cd backend && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+cd ../frontend && npm install
 ```
-### 3. Run the app
+
+Then from the root:
 ```bash
-streamlit run app/app.py
+./start.sh
 ```
+
+App runs at `http://localhost:5173`, API at `http://localhost:8000`.
