@@ -295,7 +295,7 @@ def train(req: TrainRequest):
         }
 
     elif req.task_type == "Clustering":
-        result = run_dbscan_clustering(train_df, features, hp.get("eps", 0.5), hp.get("min_samples", 5))
+        result = _run_safe(run_dbscan_clustering, train_df, features, hp.get("eps", 0.5), hp.get("min_samples", 5))
         df_c = result["df_with_clusters"]
         clean = df_c[features].dropna()
         pca = PCA(n_components=2)
@@ -313,10 +313,11 @@ def train(req: TrainRequest):
         }
 
     elif req.task_type == "Anomaly Detection":
-        result = run_anomaly_detection(train_df, features, hp.get("contamination", 0.05), hp.get("n_estimators", 100))
-        clean = train_df[features].dropna()
+        result = _run_safe(run_anomaly_detection, train_df, features, hp.get("contamination", 0.05), hp.get("n_estimators", 100))
+        clean = train_df[features].dropna().reset_index(drop=True)
         pca = PCA(n_components=2)
         reduced = pca.fit_transform(clean)
+        # reset_index ensures labels list and reduced array share the same 0-based positions
         labels = [result["labels"][i] for i in clean.index]
         return {
             "task_type": "Anomaly Detection",
